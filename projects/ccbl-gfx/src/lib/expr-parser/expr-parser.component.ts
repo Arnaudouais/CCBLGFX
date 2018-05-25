@@ -10,6 +10,7 @@ import * as jsep from "jsep";
 export class ExprParserComponent implements OnInit {
   @Input() expression;
   @Input() class;
+  @Input() varHover: (identifier: string) => void;
 
   private expressionParsed;
   private expressionType;
@@ -18,6 +19,7 @@ export class ExprParserComponent implements OnInit {
   constructor() { }
 
   ngOnInit() {
+    this.varHover('');
     if (!this.expression) {
       return;
     }

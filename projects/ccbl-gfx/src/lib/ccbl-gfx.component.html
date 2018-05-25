@@ -1,39 +1,45 @@
 <div style="display: flex;">
-  <div style="width: 20%; padding-left: 10px">
+  <div style="width: 18%; padding: 10px 20px;">
     <div>
       <h3>Imports</h3>
       <div>
         <h6>Channels</h6>
         <ul>
-          <li *ngFor="let c of hrp.dependencies.import.channels">{{c.name}}: {{c.type}}</li>
+          <li *ngFor="let c of hrp.dependencies.import.channels" [class.hover]="c.name === hover">{{c.name}}: {{c.type}}</li>
         </ul>
         <h6>Emitter</h6>
         <ul>
-          <li *ngFor="let c of hrp.dependencies.import.emitters">{{c.name}}: {{c.type}}</li>
+          <li *ngFor="let c of hrp.dependencies.import.emitters" [class.hover]="c.name === hover">{{c.name}}: {{c.type}}</li>
         </ul>
         <h6>Events</h6>
         <ul>
-          <li *ngFor="let c of hrp.dependencies.import.events">{{c.name}}: {{c.type}}</li>
+          <li *ngFor="let c of hrp.dependencies.import.events" [class.hover]="c.name === hover">{{c.name}}: {{c.type}}</li>
         </ul>
       </div>
       <h3>Exports</h3>
       <div>
         <h6>Channels</h6>
         <ul>
-          <li *ngFor="let c of hrp.dependencies.export.channels">{{c.name}}: {{c.type}}</li>
+          <li *ngFor="let c of hrp.dependencies.export.channels" [class.hover]="c.name === hover">{{c.name}}: {{c.type}}</li>
         </ul>
         <h6>Emitter</h6>
         <ul>
-          <li *ngFor="let c of hrp.dependencies.export.emitters">{{c.name}}: {{c.type}}</li>
+          <li *ngFor="let c of hrp.dependencies.export.emitters" [class.hover]="c.name === hover">{{c.name}}: {{c.type}}</li>
         </ul>
         <h6>Events</h6>
         <ul>
-          <li *ngFor="let c of hrp.dependencies.export .events">{{c.name}}: {{c.type}}</li>
+          <li *ngFor="let c of hrp.dependencies.export .events" [class.hover]="c.name === hover">{{c.name}}: {{c.type}}</li>
         </ul>
       </div>
     </div>
+    <h3>Local channels</h3>
+    <div>
+      <ul>
+        <li *ngFor="let c of hrp.localChannels" [class.hover]="c.name === hover">{{c.name}}: {{c.type}}</li>
+      </ul>
+    </div>
   </div>
-  <div style="width: 70%;">
-    <lib-context [context]="hrp" [truc]="selectBinded"></lib-context>
+  <div style="width: 75%;">
+    <lib-context [context]="hrp" [truc]="selectBinded" [varHover]="varHoverBinded"></lib-context>
   </div>
 </div>

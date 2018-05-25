@@ -5,11 +5,16 @@ import {ContextComponent} from './context/context.component';
 @Component({
   selector: 'lib-ccbl-gfx',
   templateUrl: 'ccbl-gfx.component.html',
-  styles: []
+  styles: [`
+    @import url('https://fonts.googleapis.com/css?family=IBM+Plex+Sans');
+    * {font-family: 'IBM Plex Sans', serif;}
+    .hover {background-color: hsla(0, 50%, 0%, .2);}
+  `]
 })
 export class CcblGfxComponent implements OnInit {
   hrp: HumanReadableProgram;
   selectedContext: ContextComponent;
+  hover = '';
 
   constructor() { }
 
@@ -127,8 +132,15 @@ export class CcblGfxComponent implements OnInit {
     this.selectedContext = c;
   }
 
+  varHover(identifier: string): void {
+    this.hover = identifier;
+  }
+
   get selectBinded() {
     return this.select.bind(this);
   }
 
+  get varHoverBinded() {
+    return this.varHover.bind(this);
+  }
 }

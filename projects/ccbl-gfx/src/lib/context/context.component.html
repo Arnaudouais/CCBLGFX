@@ -2,10 +2,11 @@
   <div class="header">
     <h3 class="title">{{context.contextName}}</h3>
     <div class="state">
-      <lib-expr-parser [expression]="context.state"></lib-expr-parser>
+      <lib-expr-parser [expression]="context.state" [varHover]="varHover"></lib-expr-parser>
+      <button type="button" style="float: right; margin-right: 12px;" (click)="hidden = !hidden">P</button>
     </div>
   </div>
-  <div class="actions">
+  <div class="actions" *ngIf="!hidden">
     <table>
       <tr *ngFor="let a of context.actions">
         <td>{{a.channel}}</td>
@@ -13,7 +14,16 @@
       </tr>
     </table>
   </div>
-  <div class="subcontexts">
-    <lib-context *ngFor="let c of context.allen?.During" [context]="c" [truc]="truc" class="child"></lib-context>
+  <div class="subcontexts" *ngIf="!hidden">
+    <div class="before">
+      <h2>Before</h2>
+    </div>
+    <div class="during">
+      <h2>During</h2>
+      <lib-context *ngFor="let c of context.allen?.During" [context]="c" [truc]="truc" class="child" [varHover]="varHover"></lib-context>
+    </div>
+    <div class="after">
+      <h2>After</h2>
+    </div>
   </div>
 </div>

@@ -8,9 +8,11 @@ import {HumanReadableStateContext} from 'ccbl-js/ProgramObjectInterface';
 })
 export class ContextComponent {
   selected = false;
+  hidden = true;
 
   @Input() context: HumanReadableStateContext;
   @Input() truc: (ContextComponent) => void;
+  @Input() varHover: (identifier: string) => void;
 
   @HostListener('click', ['$event']) onClick($event) {
     $event.stopPropagation();
