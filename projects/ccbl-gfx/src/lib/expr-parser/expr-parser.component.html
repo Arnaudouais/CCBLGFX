@@ -1,0 +1,44 @@
+<span *ngIf="expressionType" [ngClass]="classes">
+  <span *ngIf="expressionType === 'Compound'">
+    <ng-container *ngFor="let e of expressionParsed.body; let i = index">
+      <span *ngIf="i > 0">&nbsp;</span>
+      <lib-expr-parser [expression]="e"></lib-expr-parser>
+    </ng-container>
+  </span>
+
+  <span *ngIf="expressionType === 'MemberExpression'">
+    <lib-expr-parser [expression]="expressionParsed.object"></lib-expr-parser>
+    <span class="op">.</span>
+    <lib-expr-parser [expression]="expressionParsed.property" [class]="'property'"></lib-expr-parser>
+  </span>
+
+  <span *ngIf="expressionType === 'BinaryExpression'">
+    <lib-expr-parser [expression]="expressionParsed.left"></lib-expr-parser>
+    <span>&nbsp;</span>
+    <span class="binop">{{expressionParsed.operator}}</span>
+    <span>&nbsp;</span>
+    <lib-expr-parser [expression]="expressionParsed.right"></lib-expr-parser>
+  </span>
+
+  <span *ngIf="expressionType === 'CallExpression'">
+    <lib-expr-parser [expression]="expressionParsed.callee" [class]="'fun-call'"></lib-expr-parser>
+    <span>(</span>
+    <lib-expr-parser *ngFor="let a of expressionParsed.arguments" [expression]="a"></lib-expr-parser>
+    <span>)</span>
+  </span>
+
+  <span *ngIf="expressionType === 'UnaryExpression'">
+    <span *ngIf="expressionParsed.prefix">{{expressionParsed.operator}}</span>
+    <lib-expr-parser [expression]="expressionParsed.argument"></lib-expr-parser>
+    <span *ngIf="!expressionParsed.prefix">{{expressionParsed.operator}}</span>
+  </span>
+
+  <span *ngIf="expressionType === 'Literal'">
+    <span class="constant">{{expressionParsed.raw}}</span>
+  </span>
+
+  <span *ngIf="expressionType === 'Identifier'">
+    <span [class.identifier]="classes.length < 2">{{expressionParsed.name}}</span>
+  </span>
+</span>
+

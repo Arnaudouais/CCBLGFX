@@ -7,7 +7,7 @@ import {HumanReadableStateContext} from 'ccbl-js/ProgramObjectInterface';
   templateUrl: 'context.component.html'
 })
 export class ContextComponent {
-  cssClass = [];
+  selected = false;
 
   @Input() context: HumanReadableStateContext;
   @Input() truc: (ContextComponent) => void;
@@ -15,11 +15,10 @@ export class ContextComponent {
   @HostListener('click', ['$event']) onClick($event) {
     $event.stopPropagation();
     this.truc(this);
-    this.cssClass.push("selected");
+    this.selected = true;
   }
 
   unselect() {
-    this.cssClass.splice(0, this.cssClass.length);
+    this.selected = false;
   }
-
 }

@@ -1,10 +1,19 @@
-<div class="container" [ngClass]="cssClass">
-  <div style="border-bottom: 1px solid white; width: 100%; background-color: #D1E5E8">
-    <h3 style="text-align: center; margin-top: 0; padding-top: 8px">{{context.contextName}}</h3>
-    <div style="text-align: center; margin-bottom: 5px">{{context.state}}</div>
+<div class="container" [class.selected]="selected">
+  <div class="header">
+    <h3 class="title">{{context.contextName}}</h3>
+    <div class="state">
+      <lib-expr-parser [expression]="context.state"></lib-expr-parser>
+    </div>
   </div>
-  <div style="padding: 30px; display: flex; flex-direction: column; background-color: #E5FFFB">
-    <div style="margin-left: 10px;" *ngFor="let a of context.actions">{{a.channel}} &larr; {{a.affectation.value}}</div>
+  <div class="actions">
+    <table>
+      <tr *ngFor="let a of context.actions">
+        <td>{{a.channel}}</td>
+        <td>{{a.affectation.value}}</td>
+      </tr>
+    </table>
+  </div>
+  <div class="subcontexts">
     <lib-context *ngFor="let c of context.allen?.During" [context]="c" [truc]="truc" class="child"></lib-context>
   </div>
 </div>

@@ -1,0 +1,29 @@
+/* Type styles */
+.Identifier:hover {
+  background-color: hsla(0, 50%, 0%, .20);
+}
+
+/* Individual properties */
+.fun-call {
+  color: red;
+}
+
+.property {
+  color: lightseagreen;
+}
+
+.identifier {
+  color: cornflowerblue;
+}
+
+.constant {
+  font-style: italic;
+  color: #222222;
+}
+
+.op {
+}
+
+.binop {
+  font-weight: bold;
+}
