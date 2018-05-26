@@ -1,6 +1,7 @@
-import { Component, OnInit } from '@angular/core';
+import {Component} from '@angular/core';
 import {HumanReadableProgram} from 'ccbl-js/ProgramObjectInterface';
 import {ContextComponent} from './context/context.component';
+import {CcblGfxService} from "./ccbl-gfx.service";
 
 @Component({
   selector: 'lib-ccbl-gfx',
@@ -11,118 +12,17 @@ import {ContextComponent} from './context/context.component';
     .hover {background-color: hsla(0, 50%, 0%, .2);}
   `]
 })
-export class CcblGfxComponent implements OnInit {
+export class CcblGfxComponent {
   hrp: HumanReadableProgram;
   selectedContext: ContextComponent;
   hover = '';
 
-  constructor() { }
-
-  ngOnInit() {
-    const program = {
-      dependencies: {
-        import: {
-          emitters: [
-            {name: "gyro", type: "{alpha, beta, gamma}"},
-            {name: "acc", type: "{x, y, z}"}
-          ],
-          channels: [
-            {name: "lampAvatar", type: "COLOR"},
-          ],
-          events: [
-            {name: "btToggleAvatarOnOff", type: "string"}
-          ]
-        },
-        export: {
-          emitters: [
-            {name: "face", type: "CubeFace"},
-            {name: "rotation", type: "ClockWiseOrNot"},
-            {name: "movingFast", type: "boolean"},
-            {name: "falling", type: "boolean"}
-          ],
-          events: [
-            {name: "taptap", type: "string"}
-          ]
-        }
-      },
-      localChannels: [
-        {name: "G", type: "number"},
-        {name: "gyroThreshold", type: "number"},
-        {name: "R", type: "number"},
-        {name: "accNorm", type: "number"}
-      ],
-      actions: [
-        {channel: "G", affectation: {value: `9.81`}},
-        {channel: "gyroThreshold", affectation: {value: `0`}},
-        {channel: "R", affectation: {value: `0`}},
-        {channel: "rotation", affectation: {value: `"none"`}},
-        {channel: "movingFast", affectation: {value: `true`}},
-        {channel: "face", affectation: {value: `"unknown"`}},
-        {channel: "falling", affectation: {value: `false`}},
-        {channel: "accNorm", affectation: {value: `sqrt(acc.x^2 + acc.y^2 + acc.z^2)`}}
-      ],
-      allen: {
-        During: [{
-          contextName: "falling",
-          state: "abs(accNorm) < 0.05 * G",
-          actions: [{channel: "falling", affectation: {value: "true"}}]
-        }, {
-          contextName: "immobile",
-          state: "abs(accNorm - G) < 0.1*G ",
-          actions: [{channel: "movingFast", affectation: {value: "false"}}],
-          allen: {
-            During: [{
-              contextName: "Face_1",
-              state: "acc.x > 0 and abs(acc.x - G) < 0.1*G",
-              actions: [ {channel: "face", affectation: {value: "1"}}
-                , {channel: "R", affectation: {value: "gyro.alpha"}} ]
-            }, {
-              contextName: "Face_6",
-              state: "acc.x < 0 and abs(G - acc.x) < 0.1*G",
-              actions: [ {channel: "face", affectation: {value: "6"}}
-                , {channel: "R", affectation: {value: "-gyro.alpha"}} ]
-            }, {
-              contextName: "Face_2",
-              state: "acc.y > 0 and abs(acc.y - G) < 0.1*G",
-              actions: [ {channel: "face", affectation: {value: "2"}}
-                , {channel: "R", affectation: {value: "gyro.beta"}} ]
-            }, {
-              contextName: "Face_5",
-              state: "acc.y < 0 and abs(G - acc.y) < 0.1*G",
-              actions: [ {channel: "face", affectation: {value: "5"}}
-                , {channel: "R", affectation: {value: "-gyro.beta"}} ]
-            }, {
-              contextName: "Face_3",
-              state: "acc.z > 0 and abs(acc.z - G) < 0.1*G",
-              actions: [ {channel: "face", affectation: {value: "3"}}
-                , {channel: "R", affectation: {value: "gyro.gamma"}} ]
-            }, {
-              contextName: "Face_4",
-              state: "acc.z < 0 and abs(G - acc.z) < 0.1*G",
-              actions: [ {channel: "face", affectation: {value: "4"}}
-                , {channel: "R", affectation: {value: "-gyro.gamma"}} ]
-            }]
-          }
-        }, {
-          contextName: "turningClockWise",
-          state: "R > gyroThreshold",
-          actions: [
-            {channel: "rotation", affectation: {value: `"clockwise"`}}
-          ]
-        }, {
-          contextName: "turningAntiClockWise",
-          state: "-R > gyroThreshold",
-          actions: [
-            {channel: "rotation", affectation: {value: `"anticlockwise"`}}
-          ]
-        }]
-      }
-    };
-    this.loadProgram(program);
+  constructor(private ccblGfxService: CcblGfxService) {
+    this.ccblGfxService.addObserver(this.programChanged.bind(this));
   }
 
-  loadProgram(hrp: HumanReadableProgram): void {
-    this.hrp = hrp;
+  programChanged(p: HumanReadableProgram): void {
+    this.hrp = p;
   }
 
   select(c: ContextComponent): void {

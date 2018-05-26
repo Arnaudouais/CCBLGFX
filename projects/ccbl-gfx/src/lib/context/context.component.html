@@ -1,29 +1,59 @@
 <div class="container" [class.selected]="selected">
   <div class="header">
-    <h3 class="title">{{context.contextName}}</h3>
+    <h3 class="title">
+      <span *ngIf="edits.contextName"><input type="text" [(ngModel)]="context.contextName"></span>
+      <span *ngIf="!edits.contextName">{{context.contextName}}</span>
+      <button type="button" *ngIf="!edits.contextName" (click)="edits.contextName = true;">Edit</button>
+      <button type="button" *ngIf="edits.contextName" (click)="edits.contextName = false;">Ok</button>
+    </h3>
     <div class="state">
-      <lib-expr-parser [expression]="context.state" [varHover]="varHover"></lib-expr-parser>
+      <span *ngIf="edits.state"><input type="text" [(ngModel)]="context.state"></span>
+      <span *ngIf="!edits.state"><lib-expr-parser [expression]="context.state" [varHover]="varHover"></lib-expr-parser></span>
+      <button type="button" *ngIf="!edits.state" (click)="edits.state = true;">Edit</button>
+      <button type="button" *ngIf="edits.state" (click)="edits.state = false;">Ok</button>
       <button type="button" style="float: right; margin-right: 12px;" (click)="hidden = !hidden">P</button>
     </div>
   </div>
   <div class="actions" *ngIf="!hidden">
     <table>
       <tr *ngFor="let a of context.actions">
-        <td>{{a.channel}}</td>
-        <td>{{a.affectation.value}}</td>
+        <td (click)="changeAction(a)">{{a.channel}}</td>
+        <td>
+          <span *ngIf="a.edit">
+            <input type="text" [(ngModel)]="a.affectation.value">
+          </span>
+          <span *ngIf="!a.edit">
+            <lib-expr-parser [expression]="a.affectation.value" [varHover]="varHover"></lib-expr-parser>
+          </span>
+        </td>
+        <td>
+          <button type="button" *ngIf="!a.edit" (click)="a.edit = true">Edit</button>
+          <button type="button" *ngIf="a.edit" (click)="a.edit = false">Ok</button>
+        </td>
+      </tr>
+      <tr>
+        <td><button type="button" (click)="newAction()">New</button></td>
       </tr>
     </table>
   </div>
   <div class="subcontexts" *ngIf="!hidden">
     <div class="before">
-      <h2>Before</h2>
+      <h3>Before</h3>
     </div>
     <div class="during">
-      <h2>During</h2>
-      <lib-context *ngFor="let c of context.allen?.During" [context]="c" [truc]="truc" class="child" [varHover]="varHover"></lib-context>
+      <h3>During</h3>
+      <div class="contexts" [dragula]='"bag"' [dragulaModel]='context.allen.During' style="min-height: 20px">
+        <lib-context
+            *ngFor="let c of context.allen.During"
+            [context]="c"
+            [truc]="truc"
+            [varHover]="varHover"
+            class="child"></lib-context>
+        <button type="button" style="width: 100%; margin-top: 10px;" (click)="newDuringContext()">New context</button>
+      </div>
     </div>
     <div class="after">
-      <h2>After</h2>
+      <h3>After</h3>
     </div>
   </div>
 </div>
