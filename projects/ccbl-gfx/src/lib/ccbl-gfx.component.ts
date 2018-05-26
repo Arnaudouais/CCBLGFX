@@ -7,8 +7,6 @@ import {CcblGfxService} from "./ccbl-gfx.service";
   selector: 'lib-ccbl-gfx',
   templateUrl: 'ccbl-gfx.component.html',
   styles: [`
-    @import url('https://fonts.googleapis.com/css?family=IBM+Plex+Sans');
-    * {font-family: 'IBM Plex Sans', serif;}
     .hover {background-color: hsla(0, 50%, 0%, .2);}
   `]
 })

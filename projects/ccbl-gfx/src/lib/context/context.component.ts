@@ -47,6 +47,10 @@ export class ContextComponent implements OnInit {
     this.selected = false;
   }
 
+  private deleteContext() {
+
+  }
+
   private newAction() {
     this.context.actions.push({channel: 'NEW', affectation: {value: '0'}});
   }

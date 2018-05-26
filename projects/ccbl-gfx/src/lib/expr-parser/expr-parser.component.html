@@ -34,11 +34,16 @@
   </span>
 
   <span *ngIf="expressionType === 'Literal'">
-    <span class="constant">{{expressionParsed.raw}}</span>
+    <span class="constant" mdbTooltip="Literal: {{expressionParsed.raw}}" placement="bottom">{{expressionParsed.raw}}</span>
   </span>
 
   <span *ngIf="expressionType === 'Identifier'">
-    <span [class.identifier]="classes.length < 2" (mouseenter)="varHover(expressionParsed.name)" (mouseleave)="varHover('')">{{expressionParsed.name}}</span>
+    <span
+        [class.identifier]="classes.length < 2"
+        (mouseenter)="varHover(expressionParsed.name)"
+        (mouseleave)="varHover('')"
+        mdbTooltip="Identifier: {{expressionParsed.name}}"
+        placement="bottom">{{expressionParsed.name}}</span>
   </span>
 </span>
 

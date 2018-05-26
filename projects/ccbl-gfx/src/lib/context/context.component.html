@@ -1,20 +1,27 @@
-<div class="container" [class.selected]="selected">
-  <div class="header">
-    <h3 class="title">
-      <span *ngIf="edits.contextName"><input type="text" [(ngModel)]="context.contextName"></span>
-      <span *ngIf="!edits.contextName">{{context.contextName}}</span>
-      <button type="button" *ngIf="!edits.contextName" (click)="edits.contextName = true;">Edit</button>
-      <button type="button" *ngIf="edits.contextName" (click)="edits.contextName = false;">Ok</button>
+<div class="context-container" [class.context-selected]="selected">
+  <div class="context-header">
+    <h3 class="context-title">
+      <div class="md-form md-form-sm input-group">
+        <span *ngIf="!edits.contextName">{{context.contextName}}</span>
+        <input type="text" *ngIf="edits.contextName" [(ngModel)]="context.contextName" class="form-control form-control-sm">
+        <button type="button" class="btn btn-sm btn-primary" (click)="edits.contextName = !edits.contextName">
+          <span *ngIf="edits.contextName">Ok</span>
+          <span *ngIf="!edits.contextName">Edit</span>
+        </button>
+        <button type="button" class="btn btn-sm btn-danger" style="position: absolute; right: 0;" (click)="deleteContext()">Delete</button>
+      </div>
     </h3>
-    <div class="state">
-      <span *ngIf="edits.state"><input type="text" [(ngModel)]="context.state"></span>
-      <span *ngIf="!edits.state"><lib-expr-parser [expression]="context.state" [varHover]="varHover"></lib-expr-parser></span>
-      <button type="button" *ngIf="!edits.state" (click)="edits.state = true;">Edit</button>
-      <button type="button" *ngIf="edits.state" (click)="edits.state = false;">Ok</button>
-      <button type="button" style="float: right; margin-right: 12px;" (click)="hidden = !hidden">P</button>
+    <div class="context-state">
+      <input type="text" [(ngModel)]="context.state" *ngIf="edits.state">
+      <lib-expr-parser *ngIf="!edits.state" [expression]="context.state" [varHover]="varHover"></lib-expr-parser>
+      <button type="button" class="btn btn-sm btn-primary" (click)="edits.state = !edits.state">
+        <span *ngIf="edits.state">Ok</span>
+        <span *ngIf="!edits.state">Edit</span>
+      </button>
+      <button type="button" class="btn btn-sm btn-info" style="float: right;" (click)="hidden = !hidden">Show/Hide</button>
     </div>
   </div>
-  <div class="actions" *ngIf="!hidden">
+  <div class="context-actions" *ngIf="!hidden">
     <table>
       <tr *ngFor="let a of context.actions">
         <td (click)="changeAction(a)">{{a.channel}}</td>
@@ -27,32 +34,36 @@
           </span>
         </td>
         <td>
-          <button type="button" *ngIf="!a.edit" (click)="a.edit = true">Edit</button>
-          <button type="button" *ngIf="a.edit" (click)="a.edit = false">Ok</button>
+          <button type="button" class="btn btn-sm btn-primary" (click)="a.edit = !a.edit">
+            <span *ngIf="a.edit">Ok</span>
+            <span *ngIf="!a.edit">Edit</span>
+          </button>
         </td>
       </tr>
       <tr>
-        <td><button type="button" (click)="newAction()">New</button></td>
+        <td colspan="3">
+          <button type="button" class="btn btn-sm btn-success w-100 m-0" (click)="newAction()">New action</button>
+        </td>
       </tr>
     </table>
   </div>
-  <div class="subcontexts" *ngIf="!hidden">
-    <div class="before">
+  <div class="context-subcontexts" *ngIf="!hidden">
+    <div class="context-before">
       <h3>Before</h3>
     </div>
-    <div class="during">
+    <div class="context-during">
       <h3>During</h3>
-      <div class="contexts" [dragula]='"bag"' [dragulaModel]='context.allen.During' style="min-height: 20px">
+      <div class="context-contexts" [dragula]='"bag"' [dragulaModel]='context.allen.During' style="min-height: 20px">
         <lib-context
             *ngFor="let c of context.allen.During"
             [context]="c"
             [truc]="truc"
             [varHover]="varHover"
-            class="child"></lib-context>
-        <button type="button" style="width: 100%; margin-top: 10px;" (click)="newDuringContext()">New context</button>
+            class="context-child"></lib-context>
+        <button type="button" class="btn btn-sm btn-success w-100 m-0 mt-2" (click)="newDuringContext()">New context</button>
       </div>
     </div>
-    <div class="after">
+    <div class="context-after">
       <h3>After</h3>
     </div>
   </div>

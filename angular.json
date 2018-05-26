@@ -23,9 +23,15 @@
               "src/assets"
             ],
             "styles": [
+              "node_modules/font-awesome/scss/font-awesome.scss",
+              "node_modules/angular-bootstrap-md/scss/bootstrap/bootstrap.scss",
+              "node_modules/angular-bootstrap-md/scss/mdb-free.scss",
               "src/styles.css"
             ],
-            "scripts": []
+            "scripts": [
+              "node_modules/chart.js/dist/Chart.js",
+              "node_modules/hammerjs/hammer.min.js"
+            ]
           },
           "configurations": {
             "production": {
@@ -122,12 +128,21 @@
       "sourceRoot": "projects/ccbl-gfx/src",
       "projectType": "library",
       "prefix": "lib",
+      "schematics": {
+        "@schematics/angular:component": {
+          "styleext": "scss"
+        }
+      },
       "architect": {
         "build": {
           "builder": "@angular-devkit/build-ng-packagr:build",
           "options": {
             "tsConfig": "projects/ccbl-gfx/tsconfig.lib.json",
-            "project": "projects/ccbl-gfx/ng-package.json"
+            "project": "projects/ccbl-gfx/ng-package.json",
+            "styles": [
+              "styles.scss"
+            ],
+            "scripts": []
           },
           "configurations": {
             "production": {

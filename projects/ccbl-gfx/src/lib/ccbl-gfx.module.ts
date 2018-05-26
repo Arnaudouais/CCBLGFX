@@ -1,4 +1,4 @@
-import { NgModule } from '@angular/core';
+import {NgModule, NO_ERRORS_SCHEMA} from '@angular/core';
 import { CcblGfxComponent } from './ccbl-gfx.component';
 import {ContextComponent} from './context/context.component';
 import {BrowserModule} from '@angular/platform-browser';
@@ -9,6 +9,7 @@ import {CcblGfxService} from "./ccbl-gfx.service";
 import {MatDialogModule} from "@angular/material";
 import {BrowserAnimationsModule} from "@angular/platform-browser/animations";
 import {DragulaModule} from "ng2-dragula";
+import {MDBBootstrapModule} from "angular-bootstrap-md";
 
 @NgModule({
   imports: [
@@ -16,7 +17,8 @@ import {DragulaModule} from "ng2-dragula";
     BrowserAnimationsModule,
     FormsModule,
     MatDialogModule,
-    DragulaModule
+    DragulaModule,
+    MDBBootstrapModule.forRoot()
   ],
   declarations: [
     CcblGfxComponent,
@@ -26,6 +28,7 @@ import {DragulaModule} from "ng2-dragula";
   ],
   entryComponents: [VarSelectDialogComponent],
   exports: [CcblGfxComponent],
-  providers: [CcblGfxService]
+  providers: [CcblGfxService],
+  schemas: [NO_ERRORS_SCHEMA]
 })
 export class CcblGfxModule { }
