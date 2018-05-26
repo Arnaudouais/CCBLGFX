@@ -32,14 +32,9 @@ To get more help on the Angular CLI use `ng help` or go check out the [Angular C
 
 ## TODO
 
-* Be able to delete contexts, actions - fast
 * Be able to change environment - medium
-* Root context must not be hidden - fast
-* Root context must not be editable - fast
-* Popup info on hover on identifiers - medium
-* Hightlight identifier on property accessor - fast
+* Highlight identifier on property accessor - fast
 * Fix colors - fast
-* Change buttons style - fast
 * More interface info when hover on actions (change cursor style, etc) - fast
 * Do Before, After and Sequential allen relationships - long
 * Improve dialog to select variables/add feature to filter by type - fast

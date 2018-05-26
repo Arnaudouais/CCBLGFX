@@ -30,15 +30,11 @@ export class CcblGfxComponent {
     this.selectedContext = c;
   }
 
-  varHover(identifier: string): void {
-    this.hover = identifier;
+  hoverOn(name: string): void {
+    this.hover = name;
   }
 
-  get selectBinded() {
-    return this.select.bind(this);
-  }
-
-  get varHoverBinded() {
-    return this.varHover.bind(this);
+  get _this() {
+    return this;
   }
 }

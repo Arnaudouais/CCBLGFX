@@ -1,25 +1,27 @@
 <div class="context-container" [class.context-selected]="selected">
   <div class="context-header">
-    <h3 class="context-title">
-      <div class="md-form md-form-sm input-group">
-        <span *ngIf="!edits.contextName">{{context.contextName}}</span>
-        <input type="text" *ngIf="edits.contextName" [(ngModel)]="context.contextName" class="form-control form-control-sm">
-        <button type="button" class="btn btn-sm btn-primary" (click)="edits.contextName = !edits.contextName">
-          <span *ngIf="edits.contextName">Ok</span>
-          <span *ngIf="!edits.contextName">Edit</span>
+    <ng-container *ngIf="parent">
+      <h3 class="context-title">
+        <div class="md-form md-form-sm input-group">
+          <span *ngIf="!edits.contextName">{{context.contextName}}</span>
+          <input type="text" *ngIf="edits.contextName" [(ngModel)]="context.contextName" class="form-control form-control-sm">
+          <button type="button" class="btn btn-sm btn-primary" (click)="edits.contextName = !edits.contextName">
+            <span *ngIf="edits.contextName">Ok</span>
+            <span *ngIf="!edits.contextName">Edit</span>
+          </button>
+          <button type="button" class="btn btn-sm btn-danger" style="position: absolute; right: 0;" (click)="deleteContext()">Delete</button>
+        </div>
+      </h3>
+      <div class="context-state">
+        <input type="text" [(ngModel)]="context.state" *ngIf="edits.state">
+        <lib-expr-parser *ngIf="!edits.state" [expression]="context.state" [context]="_this" [parent]="undefined"></lib-expr-parser>
+        <button type="button" class="btn btn-sm btn-primary" (click)="edits.state = !edits.state">
+          <span *ngIf="edits.state">Ok</span>
+          <span *ngIf="!edits.state">Edit</span>
         </button>
-        <button type="button" class="btn btn-sm btn-danger" style="position: absolute; right: 0;" (click)="deleteContext()">Delete</button>
+        <button type="button" class="btn btn-sm btn-info" style="float: right;" (click)="hidden = !hidden">Show/Hide</button>
       </div>
-    </h3>
-    <div class="context-state">
-      <input type="text" [(ngModel)]="context.state" *ngIf="edits.state">
-      <lib-expr-parser *ngIf="!edits.state" [expression]="context.state" [varHover]="varHover"></lib-expr-parser>
-      <button type="button" class="btn btn-sm btn-primary" (click)="edits.state = !edits.state">
-        <span *ngIf="edits.state">Ok</span>
-        <span *ngIf="!edits.state">Edit</span>
-      </button>
-      <button type="button" class="btn btn-sm btn-info" style="float: right;" (click)="hidden = !hidden">Show/Hide</button>
-    </div>
+    </ng-container>
   </div>
   <div class="context-actions" *ngIf="!hidden">
     <table>
@@ -30,7 +32,7 @@
             <input type="text" [(ngModel)]="a.affectation.value">
           </span>
           <span *ngIf="!a.edit">
-            <lib-expr-parser [expression]="a.affectation.value" [varHover]="varHover"></lib-expr-parser>
+            <lib-expr-parser [expression]="a.affectation.value" [context]="_this" [parent]="undefined"></lib-expr-parser>
           </span>
         </td>
         <td>
@@ -38,6 +40,7 @@
             <span *ngIf="a.edit">Ok</span>
             <span *ngIf="!a.edit">Edit</span>
           </button>
+          <button type="button" class="btn btn-sm btn-danger" (click)="deleteAction(a)">Delete</button>
         </td>
       </tr>
       <tr>
@@ -57,8 +60,8 @@
         <lib-context
             *ngFor="let c of context.allen.During"
             [context]="c"
-            [truc]="truc"
-            [varHover]="varHover"
+            [parent]="_this"
+            [wrapper]="wrapper"
             class="context-child"></lib-context>
         <button type="button" class="btn btn-sm btn-success w-100 m-0 mt-2" (click)="newDuringContext()">New context</button>
       </div>

@@ -2,34 +2,34 @@
   <span *ngIf="expressionType === 'Compound'">
     <ng-container *ngFor="let e of expressionParsed.body; let i = index">
       <span *ngIf="i > 0">&nbsp;</span>
-      <lib-expr-parser [expression]="e" [varHover]="varHover"></lib-expr-parser>
+      <lib-expr-parser [expression]="e" [parent]="_this" [context]="context"></lib-expr-parser>
     </ng-container>
   </span>
 
   <span *ngIf="expressionType === 'MemberExpression'">
-    <lib-expr-parser [expression]="expressionParsed.object" [varHover]="varHover"></lib-expr-parser>
+    <lib-expr-parser [expression]="expressionParsed.object" [parent]="_this" [context]="context"></lib-expr-parser>
     <span class="op">.</span>
-    <lib-expr-parser [expression]="expressionParsed.property" [class]="'property'" [varHover]="varHover"></lib-expr-parser>
+    <lib-expr-parser [expression]="expressionParsed.property" [class]="'property'" [parent]="_this" [context]="context"></lib-expr-parser>
   </span>
 
   <span *ngIf="expressionType === 'BinaryExpression'">
-    <lib-expr-parser [expression]="expressionParsed.left" [varHover]="varHover"></lib-expr-parser>
+    <lib-expr-parser [expression]="expressionParsed.left" [parent]="_this" [context]="context"></lib-expr-parser>
     <span>&nbsp;</span>
     <span class="binop">{{expressionParsed.operator}}</span>
     <span>&nbsp;</span>
-    <lib-expr-parser [expression]="expressionParsed.right" [varHover]="varHover"></lib-expr-parser>
+    <lib-expr-parser [expression]="expressionParsed.right" [parent]="_this" [context]="context"></lib-expr-parser>
   </span>
 
   <span *ngIf="expressionType === 'CallExpression'">
-    <lib-expr-parser [expression]="expressionParsed.callee" [class]="'fun-call'" [varHover]="varHover"></lib-expr-parser>
+    <lib-expr-parser [expression]="expressionParsed.callee" [class]="'fun-call'" [parent]="_this" [context]="context"></lib-expr-parser>
     <span>(</span>
-    <lib-expr-parser *ngFor="let a of expressionParsed.arguments" [expression]="a" [varHover]="varHover"></lib-expr-parser>
+    <lib-expr-parser *ngFor="let a of expressionParsed.arguments" [expression]="a" [parent]="_this" [context]="context"></lib-expr-parser>
     <span>)</span>
   </span>
 
   <span *ngIf="expressionType === 'UnaryExpression'">
     <span *ngIf="expressionParsed.prefix">{{expressionParsed.operator}}</span>
-    <lib-expr-parser [expression]="expressionParsed.argument" [varHover]="varHover"></lib-expr-parser>
+    <lib-expr-parser [expression]="expressionParsed.argument" [parent]="_this" [context]="context"></lib-expr-parser>
     <span *ngIf="!expressionParsed.prefix">{{expressionParsed.operator}}</span>
   </span>
 
@@ -40,8 +40,8 @@
   <span *ngIf="expressionType === 'Identifier'">
     <span
         [class.identifier]="classes.length < 2"
-        (mouseenter)="varHover(expressionParsed.name)"
-        (mouseleave)="varHover('')"
+        (mouseenter)="hoverOn(expressionParsed.name)"
+        (mouseleave)="hoverOn('')"
         mdbTooltip="Identifier: {{expressionParsed.name}}"
         placement="bottom">{{expressionParsed.name}}</span>
   </span>

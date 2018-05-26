@@ -2,79 +2,108 @@
   margin-top: 0;
   margin-bottom: 0;
 }
+
 .context-container {
   border: 2px solid #999;
   border-radius: 8px;
   box-shadow: 0 0 36px -12px #222;
 }
+
 .context-header {
   width: 100%;
   background-color: #D1E5E8;
   border-top-left-radius: 8px;
   border-top-right-radius: 8px;
   padding: 6px 30px;
+
+  &:hover {
+    cursor: grab;
+  }
 }
+
 .context-title {
   margin-top: 0;
   margin-bottom: 5px;
+
+  .md-form {
+    margin: 0;
+  }
 }
-.context-title .md-form {
-  margin: 0;
-}
+
 .context-state {
   font-size: 120%;
 }
+
 .context-actions {
   padding: 20px 30px;
   border-top: 1px solid white;
   border-bottom: 1px dashed black;
   background-color: #E5FFFB;
+
+  table {
+    .btn {
+      margin-right: 0;
+    }
+
+    tr td {
+      font-size: 110%;
+      padding-left: 0;
+      padding-right: 0;
+
+      &:nth-last-of-type(2):before {
+        content: '=';
+        margin: 0 10px;
+      }
+
+      &:first-of-type {
+        font-weight: bold;
+
+        &:hover {
+          text-decoration: underline;
+          cursor: pointer;
+        }
+      }
+    }
+  }
 }
-.context-actions table tr td {
-  font-size: 110%;
-  padding-left: 0;
-  padding-right: 0;
-}
-.context-actions table .btn {
-  margin-right: 0;
-}
-.context-actions table tr td:first-of-type {
-  font-weight: bold;
-}
-.context-actions table tr td:nth-last-of-type(2):before {
-  content: '=';
-  margin: 0 10px;
-}
+
 .context-subcontexts {
   border-bottom-left-radius: 8px;
   border-bottom-right-radius: 8px;
   display: flex;
   background-color: #E5FFFB;
+
+  h3 {
+    margin-top: 0;
+  }
 }
-.context-subcontexts h3 {
-  margin-top: 0;
-}
+
 .context-before, .context-during, .context-after {
   padding: 15px 30px;
   display: flex;
   flex-direction: column;
 }
+
 .context-contexts {
   display: flex;
   flex-direction: column;
 }
+
 .context-during {
   flex-grow: 1;
   border-left: 1px dashed black;
   border-right: 1px dashed black;
 }
+
 .context-child {
   margin-top: 10px;
   flex-grow: 1;
+
+  :first-of-type {
+    margin-top: 0;
+  }
 }
-.context-child:first-of-type {
-  margin-top: 0;
-}
+
 .context-selected {
   border: 2px solid gold;
 }
