@@ -50,7 +50,7 @@ export class ContextComponent implements OnInit {
       this.context.allen.EndWith = [];
     }
     if (!this.context.allen.Meet) {
-      //this.context.allen.Meet = {};
+      // this.context.allen.Meet = {};
     }
 
     if (!this.parent) {
@@ -80,7 +80,23 @@ export class ContextComponent implements OnInit {
       const sc = <HumanReadableStateContext> this.context.allen.During[i];
       if (sc.contextName === name) {
         this.context.allen.During.splice(i, 1);
-        break;
+        return;
+      }
+      i++;
+    }
+    for (let i = 0; i < this.context.allen.StartWith.length; i++) {
+      const sc = <HumanReadableStateContext> this.context.allen.StartWith[i];
+      if (sc.contextName === name) {
+        this.context.allen.StartWith.splice(i, 1);
+        return;
+      }
+      i++;
+    }
+    for (let i = 0; i < this.context.allen.EndWith.length; i++) {
+      const sc = <HumanReadableStateContext> this.context.allen.EndWith[i];
+      if (sc.contextName === name) {
+        this.context.allen.EndWith.splice(i, 1);
+        return;
       }
       i++;
     }

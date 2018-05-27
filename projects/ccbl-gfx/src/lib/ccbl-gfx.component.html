@@ -1,46 +1,45 @@
 <div class="container-fluid p-3 px-4">
-  <div class="row">
-    <div class="col-2">
-      <div>
-        <h3>Imports</h3>
-        <div>
-          <h6>Channels</h6>
-          <ul>
-            <li *ngFor="let c of hrp.dependencies.import.channels" [class.hover]="c.name === hover">{{c.name}}: {{c.type}}</li>
-          </ul>
-          <h6>Emitter</h6>
-          <ul>
-            <li *ngFor="let c of hrp.dependencies.import.emitters" [class.hover]="c.name === hover">{{c.name}}: {{c.type}}</li>
-          </ul>
-          <h6>Events</h6>
-          <ul>
-            <li *ngFor="let c of hrp.dependencies.import.events" [class.hover]="c.name === hover">{{c.name}}: {{c.type}}</li>
-          </ul>
-        </div>
-        <h3>Exports</h3>
-        <div>
-          <h6>Channels</h6>
-          <ul>
-            <li *ngFor="let c of hrp.dependencies.export.channels" [class.hover]="c.name === hover">{{c.name}}: {{c.type}}</li>
-          </ul>
-          <h6>Emitter</h6>
-          <ul>
-            <li *ngFor="let c of hrp.dependencies.export.emitters" [class.hover]="c.name === hover">{{c.name}}: {{c.type}}</li>
-          </ul>
-          <h6>Events</h6>
-          <ul>
-            <li *ngFor="let c of hrp.dependencies.export .events" [class.hover]="c.name === hover">{{c.name}}: {{c.type}}</li>
-          </ul>
-        </div>
-      </div>
-      <h3>Local channels</h3>
-      <div>
-        <ul>
-          <li *ngFor="let c of hrp.localChannels" [class.hover]="c.name === hover">{{c.name}}: {{c.type}}</li>
-        </ul>
-      </div>
+  <div style="position: fixed; top: 1.5rem; bottom: 1.5rem; left: 1.5rem; z-index: 1;">
+    <h3>Imports</h3>
+    <div>
+      <h6>Channels</h6>
+      <ul>
+        <li *ngFor="let c of hrp.dependencies.import.channels" [class.hover]="c.name === hover">{{c.name}}: {{c.type}}</li>
+      </ul>
+      <h6>Emitter</h6>
+      <ul>
+        <li *ngFor="let c of hrp.dependencies.import.emitters" [class.hover]="c.name === hover">{{c.name}}: {{c.type}}</li>
+      </ul>
+      <h6>Events</h6>
+      <ul>
+        <li *ngFor="let c of hrp.dependencies.import.events" [class.hover]="c.name === hover">{{c.name}}: {{c.type}}</li>
+      </ul>
     </div>
-    <div class="col">
+    <h3>Exports</h3>
+    <div>
+      <h6>Channels</h6>
+      <ul>
+        <li *ngFor="let c of hrp.dependencies.export.channels" [class.hover]="c.name === hover">{{c.name}}: {{c.type}}</li>
+      </ul>
+      <h6>Emitter</h6>
+      <ul>
+        <li *ngFor="let c of hrp.dependencies.export.emitters" [class.hover]="c.name === hover">{{c.name}}: {{c.type}}</li>
+      </ul>
+      <h6>Events</h6>
+      <ul>
+        <li *ngFor="let c of hrp.dependencies.export .events" [class.hover]="c.name === hover">{{c.name}}: {{c.type}}</li>
+      </ul>
+    </div>
+    <h3>Local channels</h3>
+    <div>
+      <ul>
+        <li *ngFor="let c of hrp.localChannels" [class.hover]="c.name === hover">{{c.name}}: {{c.type}}</li>
+      </ul>
+    </div>
+  </div>
+  <div class="row">
+    <div class="col-2"></div>
+    <div class="col-10">
       <lib-context [context]="hrp" [wrapper]="_this" [parent]="undefined"></lib-context>
     </div>
   </div>
