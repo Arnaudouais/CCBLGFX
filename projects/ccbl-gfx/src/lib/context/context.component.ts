@@ -1,5 +1,5 @@
 import {Component, HostListener, Input, OnInit} from '@angular/core';
-import {ContextOrProgram, HumanReadableStateContext} from 'ccbl-js/ProgramObjectInterface';
+import {HumanReadableStateContext} from 'ccbl-js/ProgramObjectInterface';
 import {MatDialog} from "@angular/material";
 import {VarSelectDialogComponent} from "../var-select-dialog/var-select-dialog.component";
 import {CcblGfxComponent} from "../ccbl-gfx.component";
@@ -39,8 +39,17 @@ export class ContextComponent implements OnInit {
     if (!this.context.allen) {
       this.context.allen = {};
     }
+    if (!this.context.allen.StartWith) {
+      this.context.allen.StartWith = [];
+    }
     if (!this.context.allen.During) {
       this.context.allen.During = [];
+    }
+    if (!this.context.allen.EndWith) {
+      this.context.allen.EndWith = [];
+    }
+    if (!this.context.allen.Meet) {
+      this.context.allen.Meet = {};
     }
 
     if (!this.parent) {
@@ -84,8 +93,16 @@ export class ContextComponent implements OnInit {
     this.context.actions.push({channel: 'NEW', affectation: {value: '0'}});
   }
 
+  private newStartWithContext() {
+    this.context.allen.StartWith.push({contextName: 'NEW', state: 'false'});
+  }
+
   private newDuringContext() {
     this.context.allen.During.push({contextName: 'NEW', state: 'false'});
+  }
+
+  private newEndWithContext() {
+    this.context.allen.EndWith.push({contextName: 'NEW', state: 'false'});
   }
 
   private changeAction(action: any) {
