@@ -11,7 +11,9 @@
         <button type="button" class="btn btn-sm btn-danger" style="float: right;" (click)="deleteContext()"><i class="fa fa-remove"></i></button>
       </h3>
       <div class="context-state">
-        <input type="text" [(ngModel)]="context.state" *ngIf="edits.state">
+        <mwl-text-input-autocomplete-container *ngIf="edits.state" style="display: inline-block; width: 50%;">
+          <input type="text" [(ngModel)]="context.state" mwlTextInputAutocomplete [findChoices]="findChoices" [getChoiceLabel]="getChoiceLabel" style="width: 100%;">
+        </mwl-text-input-autocomplete-container>
         <lib-expr-parser *ngIf="!edits.state" [expression]="context.state" [context]="_this" [parent]="undefined"></lib-expr-parser>
         <button type="button" class="btn btn-sm btn-primary" (click)="edits.state = !edits.state">
           <span *ngIf="edits.state"><i class="fa fa-check"></i></span>

@@ -10,6 +10,7 @@ import {MatDialogModule} from "@angular/material";
 import {BrowserAnimationsModule} from "@angular/platform-browser/animations";
 import {DragulaModule} from "ng2-dragula";
 import {MDBBootstrapModule} from "angular-bootstrap-md";
+import {TextInputAutocompleteModule} from "angular-text-input-autocomplete";
 
 @NgModule({
   imports: [
@@ -18,7 +19,8 @@ import {MDBBootstrapModule} from "angular-bootstrap-md";
     FormsModule,
     MatDialogModule,
     DragulaModule,
-    MDBBootstrapModule.forRoot()
+    MDBBootstrapModule.forRoot(),
+    TextInputAutocompleteModule
   ],
   declarations: [
     CcblGfxComponent,

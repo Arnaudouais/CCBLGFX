@@ -28,4 +28,10 @@ export class CcblGfxService {
   notifyObserver(): void {
     this.observers.forEach(o => o(this.hrp));
   }
+
+  get environmentNames(): string[] {
+    const a = [];
+    for (const k in this.environment) a.push(k);
+    return a;
+  }
 }

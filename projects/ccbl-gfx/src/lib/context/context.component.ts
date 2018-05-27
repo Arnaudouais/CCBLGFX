@@ -3,6 +3,7 @@ import {HumanReadableStateContext} from 'ccbl-js/ProgramObjectInterface';
 import {MatDialog} from "@angular/material";
 import {VarSelectDialogComponent} from "../var-select-dialog/var-select-dialog.component";
 import {CcblGfxComponent} from "../ccbl-gfx.component";
+import {CcblGfxService} from "../ccbl-gfx.service";
 
 @Component({
   selector: 'lib-context',
@@ -19,7 +20,7 @@ export class ContextComponent implements OnInit {
     state: false
   };
 
-  constructor(private dialog: MatDialog) {
+  constructor(private dialog: MatDialog, private ccblService: CcblGfxService) {
   }
 
   @Input() context: HumanReadableStateContext;
@@ -49,7 +50,7 @@ export class ContextComponent implements OnInit {
       this.context.allen.EndWith = [];
     }
     if (!this.context.allen.Meet) {
-      this.context.allen.Meet = {};
+      //this.context.allen.Meet = {};
     }
 
     if (!this.parent) {
@@ -87,6 +88,16 @@ export class ContextComponent implements OnInit {
 
   deleteAction(action: any) {
     this.context.actions.splice(this.context.actions.indexOf(action), 1);
+  }
+
+  findChoices = (searchText: string) => {
+    return this.ccblService.environmentNames.filter(item =>
+      item.toLowerCase().includes(searchText.toLowerCase())
+    );
+  };
+
+  getChoiceLabel(choice: string) {
+    return `${choice}`;
   }
 
   private newAction() {
