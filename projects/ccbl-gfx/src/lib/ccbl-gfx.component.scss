@@ -1,0 +1,7 @@
+.hover {background-color: hsla(0, 50%, 0%, .2);}
+td {
+  &:hover {
+    text-decoration: underline;
+    cursor: pointer;
+  }
+}

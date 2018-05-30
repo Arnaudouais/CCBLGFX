@@ -12,15 +12,21 @@ import {CcblGfxService} from "../ccbl-gfx.service";
 })
 export class ContextComponent implements OnInit {
   selected = false;
-  hidden = true;
+  hidden = false;
+  undraggable = false;
+  editMode = false;
+  hovered = false; // context is mouse hovered
 
   // List of things editable in the first place (always editable)
   edits = {
     contextName: false,
-    state: false
+    state: false,
+    actions: 0, // Actions that are currently being modified
+    truc: {}
   };
 
   constructor(private dialog: MatDialog, private ccblService: CcblGfxService) {
+
   }
 
   @Input() context: HumanReadableStateContext;
@@ -32,6 +38,28 @@ export class ContextComponent implements OnInit {
     this.wrapper.select(this);
     this.selected = true;
   }
+
+  @HostListener('mouseenter', ['$event']) onMouseEnter($event) {
+    $event.stopPropagation();
+    this.hovered = true;
+    if (this.parent) {
+      this.parent.hovered = false;
+    }
+  }
+
+  @HostListener('mouseleave', ['$event']) onMouseLeave($event) {
+    $event.stopPropagation();
+    this.hovered = false;
+    if (this.parent) {
+      this.parent.hovered = true;
+    }
+  }
+
+  @HostListener('dblclick', ['$event']) onDoubleClick($event) {
+    $event.stopPropagation();
+    this.editMode = !this.editMode;
+  }
+
 
   ngOnInit(): void {
     if (!this.context.actions) {
@@ -56,11 +84,22 @@ export class ContextComponent implements OnInit {
     if (!this.parent) {
       this.hidden = false;
     }
+
+    this.context.actions.forEach(a => this.edits.truc[a.channel] = false);
   }
 
   unselect() {
     this.selected = false;
   }
+
+  edit() {
+    this.editMode = true;
+  }
+
+  endEdit() {
+    this.editMode = false;
+  }
+
 
   hoverOn(name: string) {
     if (!this.parent) {
@@ -82,7 +121,6 @@ export class ContextComponent implements OnInit {
         this.context.allen.During.splice(i, 1);
         return;
       }
-      i++;
     }
     for (let i = 0; i < this.context.allen.StartWith.length; i++) {
       const sc = <HumanReadableStateContext> this.context.allen.StartWith[i];
@@ -90,7 +128,6 @@ export class ContextComponent implements OnInit {
         this.context.allen.StartWith.splice(i, 1);
         return;
       }
-      i++;
     }
     for (let i = 0; i < this.context.allen.EndWith.length; i++) {
       const sc = <HumanReadableStateContext> this.context.allen.EndWith[i];
@@ -98,7 +135,6 @@ export class ContextComponent implements OnInit {
         this.context.allen.EndWith.splice(i, 1);
         return;
       }
-      i++;
     }
   }
 
@@ -110,7 +146,7 @@ export class ContextComponent implements OnInit {
     return this.ccblService.environmentNames.filter(item =>
       item.toLowerCase().includes(searchText.toLowerCase())
     );
-  };
+  }
 
   getChoiceLabel(choice: string) {
     return `${choice}`;
@@ -136,10 +172,29 @@ export class ContextComponent implements OnInit {
     const d = this.dialog.open(VarSelectDialogComponent);
     d.afterClosed().subscribe((r: string) => {
       action.channel = r;
+      this.onEdit();
     });
   }
 
   get _this() {
     return this;
   }
+
+  private onEdit() {
+    this.wrapper.onEdit();
+  }
+
+  private onQuittingEditMode() {
+    this.editMode = !this.editMode;
+    this.edits.state = false;
+    this.edits.contextName = false;
+    this.edits.actions = 0;
+
+    for (const k in this.edits.truc) {
+      this.edits.truc[k] = false;
+    }
+
+    this.onEdit();
+  }
+
 }

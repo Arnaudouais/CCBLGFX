@@ -6,7 +6,7 @@
 .context-container {
   border: 2px solid #999;
   border-radius: 8px;
-  box-shadow: 0 0 36px -12px #222;
+  box-shadow: 0 0 18px -9px #222;
 }
 
 .context-header {
@@ -14,7 +14,7 @@
   background-color: #D1E5E8;
   border-top-left-radius: 8px;
   border-top-right-radius: 8px;
-  padding: 10px 20px;
+  padding: 5px 20px;
 
   &:hover {
     cursor: grab;
@@ -23,14 +23,27 @@
   &.full-border {
     border-radius: 8px;
   }
-}
 
-.context-title {
-  margin-top: 0;
-  margin-bottom: 5px;
+  .header-infos {
+    .context-title {
+      font-size: 125%;
 
-  .md-form {
-    margin: 0;
+      div:first-of-type {
+        font-weight: bold;
+      }
+    }
+
+    .context-action {
+      .btn-danger {
+        margin-right: 0;
+      }
+      table tr td {
+        padding-bottom: 5px;
+      }
+      table tr:last-of-type td {
+        padding-bottom: 0;
+      }
+    }
   }
 }
 
@@ -119,4 +132,12 @@
 
 .context-selected {
   border: 2px solid gold;
+}
+
+.hidden {
+  visibility: hidden;
+}
+
+.displaynone {
+  display:none;
 }

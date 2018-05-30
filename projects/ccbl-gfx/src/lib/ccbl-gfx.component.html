@@ -3,9 +3,16 @@
     <h3>Imports</h3>
     <div>
       <h6>Channels</h6>
-      <ul>
-        <li *ngFor="let c of hrp.dependencies.import.channels" [class.hover]="c.name === hover">{{c.name}}: {{c.type}}</li>
-      </ul>
+        <table>
+          <tr *ngFor="let c of hrp.dependencies.import.channels" [class.hover]="c.name === hover">
+            <td>
+              {{c.name}}:
+            </td>
+            <td>
+              {{c.type}}
+            </td>
+          </tr>
+        </table>
       <h6>Emitter</h6>
       <ul>
         <li *ngFor="let c of hrp.dependencies.import.emitters" [class.hover]="c.name === hover">{{c.name}}: {{c.type}}</li>

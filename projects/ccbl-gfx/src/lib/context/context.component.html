@@ -1,58 +1,141 @@
-<div class="context-container" [class.context-selected]="selected">
+<div class="context-container" [class.context-selected]="selected" [class.undraggable]="undraggable">
   <div class="context-header" [class.full-border]="hidden">
     <ng-container *ngIf="parent">
-      <h3 class="context-title">
-        <span *ngIf="!edits.contextName">{{context.contextName}}</span>
-        <input type="text" *ngIf="edits.contextName" [(ngModel)]="context.contextName">
-        <button type="button" class="btn btn-sm btn-primary" (click)="edits.contextName = !edits.contextName">
-          <span *ngIf="edits.contextName"><i class="fa fa-check"></i></span>
-          <span *ngIf="!edits.contextName"><i class="fa fa-pencil"></i></span>
-        </button>
-        <button type="button" class="btn btn-sm btn-danger" style="float: right;" (click)="deleteContext()"><i class="fa fa-remove"></i></button>
-      </h3>
-      <div class="context-state">
-        <mwl-text-input-autocomplete-container *ngIf="edits.state" style="display: inline-block; width: 50%;">
-          <input type="text" [(ngModel)]="context.state" mwlTextInputAutocomplete [findChoices]="findChoices" [getChoiceLabel]="getChoiceLabel" style="width: 100%;">
-        </mwl-text-input-autocomplete-container>
-        <lib-expr-parser *ngIf="!edits.state" [expression]="context.state" [context]="_this" [parent]="undefined"></lib-expr-parser>
-        <button type="button" class="btn btn-sm btn-primary" (click)="edits.state = !edits.state">
-          <span *ngIf="edits.state"><i class="fa fa-check"></i></span>
-          <span *ngIf="!edits.state"><i class="fa fa-pencil"></i></span>
-        </button>
-        <button type="button" class="btn btn-sm btn-info" style="float: right;" (click)="hidden = !hidden"><i class="fa fa-eye"></i></button>
+      <div class="header-infos row">
+        <div class="context-title col-auto">
+          <div>
+            <span *ngIf="!edits.contextName">{{context.contextName}}</span>
+            <input type="text" *ngIf="edits.contextName" [(ngModel)]="context.contextName">
+            <button
+              type="button"
+              class="btn btn-sm btn-primary"
+              [class.d-none]="!editMode"
+              (click)="edits.contextName = !edits.contextName && !edits.contextName || onEdit()">
+              <span *ngIf="edits.contextName"><i class="fa fa-check"></i></span>
+              <span *ngIf="!edits.contextName"><i class="fa fa-pencil"></i></span>
+            </button>
+          </div>
+
+          <div>
+            <mwl-text-input-autocomplete-container *ngIf="edits.state" style="display: inline-block;">
+              <input
+                type="text"
+                [(ngModel)]="context.state"
+                mwlTextInputAutocomplete
+                [findChoices]="findChoices"
+                [getChoiceLabel]="getChoiceLabel"
+                style="width: 100%;">
+            </mwl-text-input-autocomplete-container>
+            <lib-expr-parser class="undraggable" *ngIf="!edits.state" [expression]="context.state" [context]="_this" [parent]="undefined"></lib-expr-parser>
+            <button
+              type="button"
+              class="btn btn-sm btn-primary"
+              [class.d-none]="!editMode"
+              (click)="edits.state = !edits.state && !edits.state || onEdit()">
+              <span *ngIf="edits.state"><i class="fa fa-check"></i></span>
+              <span *ngIf="!edits.state"><i class="fa fa-pencil"></i></span>
+            </button>
+          </div>
+
+        </div>
+
+        <div class="context-drag col-auto" style="flex-grow: 1"></div>
+
+        <div class="context-action col-auto">
+          <table>
+            <tr>
+              <td>
+                <button
+                    type="button"
+                    class="btn btn-sm btn-danger"
+                    [class.d-none]="!editMode"
+                    (click)="deleteContext(); onEdit()">
+                  <i class="fa fa-remove"></i>
+              </button>
+              </td>
+              <td>
+                <button
+                    type="button"
+                    class="btn btn-sm"
+                    style="background-color: darkcyan !important;"
+                    [class.invisible]="!selected && !hovered && !editMode"
+                    (click)="onQuittingEditMode()">
+                  <span *ngIf="editMode"><i class="fa fa-check"></i></span>
+                  <span *ngIf="!editMode"><i class="fa fa-pencil"></i></span>
+                </button>
+              </td>
+            </tr>
+            <tr>
+              <td></td>
+              <td>
+                <button
+                  type="button"
+                  class="btn btn-sm btn-info"
+                  [class.invisible]="!selected && !hovered && !editMode"
+                  (click)="hidden = !hidden">
+                  <span *ngIf="hidden"><i class="fa fa-angle-double-down fa-lg fa-bold"></i></span>
+                  <span *ngIf="!hidden"><i class="fa fa-angle-double-up fa-lg fa-bold"></i></span>
+                </button>
+              </td>
+            </tr>
+          </table>
+
+
+
+
+        </div>
+
       </div>
     </ng-container>
   </div>
   <div class="context-actions" *ngIf="!hidden">
     <table>
-      <tr *ngFor="let a of context.actions">
-        <td (click)="changeAction(a)">{{a.channel}}</td>
+      <tr *ngFor="let a of context.actions" (mouseenter)="a.hover = true" (mouseleave)="a.hover = false">
+        <td class="undraggable" (click)="changeAction(a)">{{a.channel}}</td>
         <td>
-          <span *ngIf="a.edit">
+          <span class="undraggable" *ngIf="edits.truc[a.channel]">
             <input type="text" [(ngModel)]="a.affectation.value">
           </span>
-          <span *ngIf="!a.edit">
+          <span class="undraggable" *ngIf="!edits.truc[a.channel]">
             <lib-expr-parser [expression]="a.affectation.value" [context]="_this" [parent]="undefined"></lib-expr-parser>
           </span>
         </td>
         <td>
-          <button type="button" class="btn btn-sm btn-primary" (click)="a.edit = !a.edit">
+          <button
+            type="button"
+            class="btn btn-sm btn-primary"
+            [class.d-none]="!editMode"
+            [class.invisible] = "!a.hover"
+            (click)="edits.truc[a.channel] = !edits.truc[a.channel]; !edits.truc[a.channel] && onEdit()">
             <span *ngIf="a.edit"><i class="fa fa-check"></i></span>
             <span *ngIf="!a.edit"><i class="fa fa-pencil"></i></span>
           </button>
-          <button type="button" class="btn btn-sm btn-danger" (click)="deleteAction(a)"><i class="fa fa-remove"></i></button>
+          <button
+            type="button"
+            class="btn btn-sm btn-danger"
+            [class.d-none]="!editMode"
+            [class.invisible] = "!a.hover"
+            (click)="deleteAction(a); onEdit()">
+            <i class="fa fa-remove"></i>
+          </button>
         </td>
       </tr>
       <tr>
         <td colspan="3">
-          <button type="button" class="btn btn-sm btn-success w-100 m-0" (click)="newAction()"><i class="fa fa-plus"></i></button>
+          <button
+            type="button"
+            class="btn btn-sm btn-success w-100 m-0"
+            [class.d-none]="!editMode"
+            (click)="newAction(); onEdit()">
+            <i class="fa fa-plus"></i>
+          </button>
         </td>
       </tr>
     </table>
   </div>
   <div class="context-subcontexts" *ngIf="!hidden">
     <div class="context-before" [class.fgrow]="context.allen.StartWith.length > 0">
-      <h3>Start with</h3>
+      <h3 [class.d-none]="!editMode">Start with</h3>
       <div class="context-contexts" [dragula]='"bag"' [dragulaModel]='context.allen.StartWith' style="min-height: 20px">
         <lib-context
           *ngFor="let c of context.allen.StartWith"
@@ -60,11 +143,17 @@
           [parent]="_this"
           [wrapper]="wrapper"
           class="context-child"></lib-context>
-        <button type="button" class="btn btn-sm btn-success w-100 m-0 mt-2" (click)="newStartWithContext()"><i class="fa fa-plus"></i></button>
       </div>
+      <button
+        type="button"
+        class="btn btn-sm btn-success w-100 m-0 mt-2"
+        [class.d-none]="!editMode"
+        (click)="newStartWithContext(); onEdit()">
+        <i class="fa fa-plus"></i>
+      </button>
     </div>
     <div class="context-during">
-      <h3>During</h3>
+      <h3 [class.d-none]="!editMode">During</h3>
       <div class="context-contexts" [dragula]='"bag"' [dragulaModel]='context.allen.During' style="min-height: 20px">
         <lib-context
             *ngFor="let c of context.allen.During"
@@ -72,11 +161,17 @@
             [parent]="_this"
             [wrapper]="wrapper"
             class="context-child"></lib-context>
-        <button type="button" class="btn btn-sm btn-success w-100 m-0 mt-2" (click)="newDuringContext()"><i class="fa fa-plus"></i></button>
       </div>
+      <button
+        type="button"
+        class="btn btn-sm btn-success w-100 m-0 mt-2"
+        [class.d-none]="!editMode"
+        (click)="newDuringContext(); onEdit()">
+        <i class="fa fa-plus"></i>
+      </button>
     </div>
     <div class="context-after" [class.fgrow]="context.allen.EndWith.length > 0">
-      <h3>End with</h3>
+      <h3 [class.d-none]="!editMode">End with</h3>
       <div class="context-contexts" [dragula]='"bag"' [dragulaModel]='context.allen.EndWith' style="min-height: 20px">
         <lib-context
           *ngFor="let c of context.allen.EndWith"
@@ -84,8 +179,13 @@
           [parent]="_this"
           [wrapper]="wrapper"
           class="context-child"></lib-context>
-        <button type="button" class="btn btn-sm btn-success w-100 m-0 mt-2" (click)="newEndWithContext()"><i class="fa fa-plus"></i></button>
       </div>
+      <button
+        type="button"
+        class="btn btn-sm btn-success w-100 m-0 mt-2"
+        [class.d-none]="!editMode"
+        (click)="newEndWithContext(); onEdit()">
+        <i class="fa fa-plus"></i></button>
     </div>
   </div>
 </div>
