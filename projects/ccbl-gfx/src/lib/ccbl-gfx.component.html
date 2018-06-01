@@ -1,51 +1,340 @@
 <div class="container-fluid p-3 px-4">
-  <div style="position: fixed; top: 1.5rem; bottom: 1.5rem; left: 1.5rem; z-index: 1;">
-    <h3>Imports</h3>
-    <div>
-      <h6>Channels</h6>
-        <table>
-          <tr *ngFor="let c of hrp.dependencies.import.channels" [class.hover]="c.name === hover">
-            <td>
-              {{c.name}}:
-            </td>
-            <td>
-              {{c.type}}
-            </td>
-          </tr>
-        </table>
-      <h6>Emitter</h6>
-      <ul>
-        <li *ngFor="let c of hrp.dependencies.import.emitters" [class.hover]="c.name === hover">{{c.name}}: {{c.type}}</li>
-      </ul>
-      <h6>Events</h6>
-      <ul>
-        <li *ngFor="let c of hrp.dependencies.import.events" [class.hover]="c.name === hover">{{c.name}}: {{c.type}}</li>
-      </ul>
-    </div>
-    <h3>Exports</h3>
-    <div>
-      <h6>Channels</h6>
-      <ul>
-        <li *ngFor="let c of hrp.dependencies.export.channels" [class.hover]="c.name === hover">{{c.name}}: {{c.type}}</li>
-      </ul>
-      <h6>Emitter</h6>
-      <ul>
-        <li *ngFor="let c of hrp.dependencies.export.emitters" [class.hover]="c.name === hover">{{c.name}}: {{c.type}}</li>
-      </ul>
-      <h6>Events</h6>
-      <ul>
-        <li *ngFor="let c of hrp.dependencies.export .events" [class.hover]="c.name === hover">{{c.name}}: {{c.type}}</li>
-      </ul>
-    </div>
-    <h3>Local channels</h3>
-    <div>
-      <ul>
-        <li *ngFor="let c of hrp.localChannels" [class.hover]="c.name === hover">{{c.name}}: {{c.type}}</li>
-      </ul>
-    </div>
-  </div>
   <div class="row">
-    <div class="col-2"></div>
+    <div class="col-2" style="padding-right:0; overflow:auto">
+      <div
+           (mouseenter)="depHovered = true"
+           (mouseleave)="depHovered = false">
+        <h3>Imports</h3>
+        <div>
+          <h6>Channels&nbsp;&nbsp;&nbsp;
+            <button
+              type="button"
+              class="btn btn-sm btn-success btn-size-plus"
+              [class.invisible]="!depHovered"
+              (click)="addNew(hrp.dependencies.import.channels)"
+            >
+              <i class="fa fa-plus"></i>
+            </button>
+          </h6>
+
+          <div *ngFor="let c of hrp.dependencies.import.channels; let i = index" [class.hover]="c.name === hover" class="">
+            <div>
+              <button
+                type="button"
+                class="btn btn-sm btn-danger btn-size-remove"
+                [class.invisible]="!depHovered"
+                (click)="deleteDependencyOrChan(hrp.dependencies.import.channels,importEdits.channelsVarName,importEdits.channelsVarType,i)"
+              >
+                <i class="fa fa-remove"></i>
+              </button>
+              <span *ngIf="!importEdits.channelsVarName[i]"
+                    class="element"
+                    (click)="importEdits.channelsVarName[i] = !importEdits.channelsVarName[i]"
+              >
+            {{c.name}}&nbsp;:&nbsp;
+          </span>
+              <span *ngIf="importEdits.channelsVarName[i]"
+                    class="element"
+                    (keydown)="closeInput($event,importEdits.channelsVarName,i)"
+              >
+            <input type="text" [(ngModel)]="c.name">
+          </span>
+              <span *ngIf="!importEdits.channelsVarType[i]"
+                    class="element"
+                    (click)="importEdits.channelsVarType[i] = !importEdits.channelsVarType[i]"
+              >
+            {{c.type}}
+          </span>
+              <span *ngIf="importEdits.channelsVarType[i]"
+                    class="element"
+                    (keydown)="closeInput($event,importEdits.channelsVarType,i)"
+              >
+              <input type="text" [(ngModel)]="c.type">
+          </span>
+            </div>
+          </div>
+          <h6>Emitters&nbsp;&nbsp;&nbsp;
+            <button
+              type="button"
+              class="btn btn-sm btn-success m-0 btn-size-plus"
+              (click)="addNew(hrp.dependencies.import.emitters)"
+              [class.invisible]="!depHovered"
+            >
+              <i class="fa fa-plus"></i>
+            </button>
+          </h6>
+          <div *ngFor="let c of hrp.dependencies.import.emitters; let i = index" [class.hover]="c.name === hover" class="">
+            <div>
+              <button
+                type="button"
+                class="btn btn-sm btn-danger btn-size-remove"
+                (click)="deleteDependencyOrChan(hrp.dependencies.import.emitters,importEdits.emittersVarName,importEdits.emittersVarType,i)"
+                [class.invisible]="!depHovered"
+              >
+                <i class="fa fa-remove"></i>
+              </button>
+              <span *ngIf="!importEdits.emittersVarName[i]"
+                    class="element"
+                    (click)="importEdits.emittersVarName[i] = !importEdits.emittersVarName[i]"
+              >
+            {{c.name}}&nbsp;:&nbsp;
+          </span>
+              <span *ngIf="importEdits.emittersVarName[i]"
+                    class="element"
+                    (keydown)="closeInput($event,importEdits.emittersVarName,i)"
+              >
+            <input type="text" [(ngModel)]="c.name">
+          </span>
+              <span *ngIf="!importEdits.emittersVarType[i]"
+                    class="element"
+                    (click)="importEdits.emittersVarType[i] = !importEdits.channelsVarType[i]"
+              >
+            {{c.type}}
+          </span>
+              <span *ngIf="importEdits.emittersVarType[i]"
+                    class="element"
+                    (keydown)="closeInput($event,importEdits.emittersVarType,i)"
+              >
+            <input type="text" [(ngModel)]="c.type">
+          </span>
+            </div>
+          </div>
+          <h6>Events&nbsp;&nbsp;&nbsp;
+            <button
+              type="button"
+              class="btn btn-sm btn-success m-0 btn-size-plus"
+              [class.invisible]="!depHovered"
+              (click)="addNew(hrp.dependencies.import.events)"
+            >
+              <i class="fa fa-plus"></i>
+            </button>
+          </h6>
+          <div *ngFor="let c of hrp.dependencies.import.events; let i = index" [class.hover]="c.name === hover" class="">
+            <div>
+              <button
+                type="button"
+                class="btn btn-sm btn-danger btn-size-remove"
+                (click)="deleteDependencyOrChan(hrp.dependencies.import.events,importEdits.eventsVarName,importEdits.eventsVarType,i)"
+                [class.invisible]="!depHovered"
+              >
+                <i class="fa fa-remove"></i>
+              </button>
+              <span *ngIf="!importEdits.eventsVarName[i]"
+                    class="element"
+                    (click)="importEdits.eventsVarName[i] = !importEdits.eventsVarName[i]"
+              >
+            {{c.name}}&nbsp;:&nbsp;
+          </span>
+              <span *ngIf="importEdits.eventsVarName[i]"
+                    class="element"
+                    (keydown)="closeInput($event,importEdits.eventsVarName,i)"
+              >
+            <input type="text" [(ngModel)]="c.name">
+          </span>
+              <span *ngIf="!importEdits.eventsVarType[i]"
+                    class="element"
+                    (click)="importEdits.eventsVarType[i] = !importEdits.eventsVarType[i]"
+              >
+            {{c.type}}
+          </span>
+              <span *ngIf="importEdits.eventsVarType[i]"
+                    class="element"
+                    (keydown)="closeInput($event,importEdits.eventsVarType,i)"
+              >
+            <input type="text" [(ngModel)]="c.type">
+          </span>
+            </div>
+          </div>
+        </div>
+        <h3>Exports</h3>
+        <div>
+          <h6>Channels&nbsp;&nbsp;&nbsp;
+            <button
+              type="button"
+              class="btn btn-sm btn-success m-0 btn-size-plus"
+              (click)="addNew(hrp.dependencies.export.channels)"
+              [class.invisible]="!depHovered"
+            >
+              <i class="fa fa-plus"></i>
+            </button>
+          </h6>
+          <div *ngFor="let c of hrp.dependencies.export.channels; let i = index" [class.hover]="c.name === hover" class="">
+            <div>
+              <button
+                type="button"
+                class="btn btn-sm btn-danger btn-size-remove"
+                (click)="deleteDependencyOrChan(hrp.dependencies.export.channels,exportEdits.channelsVarName,exportEdits.channelsVarType,i)"
+                [class.invisible]="!depHovered"
+              >
+                <i class="fa fa-remove"></i>
+              </button>
+              <span *ngIf="!exportEdits.channelsVarName[i]"
+                    class="element"
+                    (click)="exportEdits.channelsVarName[i] = !exportEdits.channelsVarName[i]"
+              >
+            {{c.name}}&nbsp;:&nbsp;
+          </span>
+              <span *ngIf="exportEdits.channelsVarName[i]"
+                    class="element"
+                    (keydown)="closeInput($event,exportEdits.channelsVarName,i)"
+              >
+            <input type="text" [(ngModel)]="c.name">
+          </span>
+              <span *ngIf="!exportEdits.channelsVarType[i]"
+                    class="element"
+                    (click)="exportEdits.channelsVarType[i] = !exportEdits.channelsVarType[i]"
+              >
+            {{c.type}}
+          </span>
+              <span *ngIf="exportEdits.channelsVarType[i]"
+                    class="element"
+                    (keydown)="closeInput($event,exportEdits.channelsVarType,i)"
+              >
+            <input type="text" [(ngModel)]="c.type">
+          </span>
+            </div>
+          </div>
+          <h6>Emitters&nbsp;&nbsp;&nbsp;
+            <button
+              type="button"
+              class="btn btn-sm btn-success m-0 btn-size-plus"
+              (click)="addNew(hrp.dependencies.export.emitters)"
+              [class.invisible]="!depHovered"
+            >
+              <i class="fa fa-plus"></i>
+            </button>
+          </h6>
+          <div *ngFor="let c of hrp.dependencies.export.emitters; let i = index" [class.hover]="c.name === hover" class="">
+            <div>
+              <button
+                type="button"
+                class="btn btn-sm btn-danger btn-size-remove"
+                (click)="deleteDependencyOrChan(hrp.dependencies.export.emitters,exportEdits.emittersVarName,exportEdits.emittersVarType,i)"
+                [class.invisible]="!depHovered"
+              >
+                <i class="fa fa-remove"></i>
+              </button>
+              <span *ngIf="!exportEdits.emittersVarName[i]"
+                    class="element"
+                    (click)="exportEdits.emittersVarName[i] = !exportEdits.emittersVarName[i]"
+              >
+              {{c.name}}&nbsp;:&nbsp;
+            </span>
+              <span *ngIf="exportEdits.emittersVarName[i]"
+                    class="element"
+                    (keydown)="closeInput($event,exportEdits.emittersVarName,i)"
+              >
+              <input type="text" [(ngModel)]="c.name">
+            </span>
+              <span *ngIf="!exportEdits.emittersVarType[i]"
+                    class="element"
+                    (click)="exportEdits.emittersVarType[i] = !exportEdits.channelsVarType[i]"
+              >
+              {{c.type}}
+            </span>
+              <span *ngIf="exportEdits.emittersVarType[i]"
+                    class="element"
+                    (keydown)="closeInput($event,exportEdits.emittersVarType,i)"
+              >
+              <input type="text" [(ngModel)]="c.type">
+            </span>
+            </div>
+          </div>
+          <h6>Events&nbsp;&nbsp;&nbsp;
+            <button
+              type="button"
+              class="btn btn-sm btn-success m-0 btn-size-plus"
+              (click)="addNew(hrp.dependencies.export.events)"
+              [class.invisible]="!depHovered"
+            >
+              <i class="fa fa-plus"></i>
+            </button>
+          </h6>
+          <div *ngFor="let c of hrp.dependencies.export.events; let i = index" [class.hover]="c.name === hover" class="">
+            <div>
+              <button
+                type="button"
+                class="btn btn-sm btn-danger btn-size-remove"
+                (click)="deleteDependencyOrChan(hrp.dependencies.export.events,exportEdits.eventsVarName,exportEdits.eventsVarType,i)"
+                [class.invisible]="!depHovered"
+              >
+                <i class="fa fa-remove"></i>
+              </button>
+              <span *ngIf="!exportEdits.eventsVarName[i]"
+                    class="element"
+                    (click)="exportEdits.eventsVarName[i] = !exportEdits.eventsVarName[i]"
+              >
+            {{c.name}}&nbsp;:&nbsp;
+          </span>
+              <span *ngIf="exportEdits.eventsVarName[i]"
+                    class="element"
+                    (keydown)="closeInput($event,exportEdits.eventsVarName,i)"
+              >
+            <input type="text" [(ngModel)]="c.name">
+          </span>
+              <span *ngIf="!exportEdits.eventsVarType[i]"
+                    class="element"
+                    (click)="exportEdits.eventsVarType[i] = !exportEdits.eventsVarType[i]"
+              >
+            {{c.type}}
+          </span>
+              <span *ngIf="exportEdits.eventsVarType[i]"
+                    class="element"
+                    (keydown)="closeInput($event,exportEdits.eventsVarType,i)"
+              >
+            <input type="text" [(ngModel)]="c.type">
+          </span>
+            </div>
+          </div>
+        </div>
+        <h3>Local channels
+          <button
+            type="button"
+            class="btn btn-sm btn-success btn-size-plus"
+            [class.invisible]="!depHovered"
+            (click)="addNew(hrp.localChannels)"
+          >
+            <i class="fa fa-plus"></i>
+          </button>
+        </h3>
+        <div *ngFor="let c of hrp.localChannels; let i = index" [class.hover]="c.name === hover" class="">
+          <div>
+            <button
+              type="button"
+              class="btn btn-sm btn-danger btn-size-remove"
+              [class.invisible]="!depHovered"
+              (click)="deleteDependencyOrChan(hrp.localChannels,localChanEdits.varName, localChanEdits.varType, i)"
+            >
+              <i class="fa fa-remove"></i>
+            </button>
+            <span *ngIf="!localChanEdits.varName[i]"
+                  class="element"
+                  (click)="localChanEdits.varName[i] = !localChanEdits.varName[i]"
+            >
+            {{c.name}}&nbsp;:&nbsp;
+          </span>
+            <span *ngIf="localChanEdits.varName[i]"
+                  class="element"
+                  (keydown)="closeInput($event,localChanEdits.varName,i)"
+            >
+            <input type="text" [(ngModel)]="c.name">
+          </span>
+            <span *ngIf="!localChanEdits.varType[i]"
+                  class="element"
+                  (click)="localChanEdits.varType[i] = !localChanEdits.varType[i]"
+            >
+            {{c.type}}
+          </span>
+            <span *ngIf="localChanEdits.varType[i]"
+                  class="element"
+                  (keydown)="closeInput($event,localChanEdits.varType,i)"
+            >
+              <input type="text" [(ngModel)]="c.type">
+          </span>
+          </div>
+        </div>
+      </div>
+    </div>
     <div class="col-10">
       <lib-context [context]="hrp" [wrapper]="_this" [parent]="undefined"></lib-context>
     </div>

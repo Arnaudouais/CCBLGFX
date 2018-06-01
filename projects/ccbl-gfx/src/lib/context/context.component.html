@@ -5,7 +5,8 @@
         <div class="context-title col-auto">
           <div>
             <span *ngIf="!edits.contextName">{{context.contextName}}</span>
-            <input type="text" *ngIf="edits.contextName" [(ngModel)]="context.contextName">
+            <input type="text" *ngIf="edits.contextName" [(ngModel)]="context.contextName"
+                   (keydown)="closeInputName($event)">
             <button
               type="button"
               class="btn btn-sm btn-primary"
@@ -24,7 +25,8 @@
                 mwlTextInputAutocomplete
                 [findChoices]="findChoices"
                 [getChoiceLabel]="getChoiceLabel"
-                style="width: 100%;">
+                style="width: 100%;"
+                (keydown)="closeInputState($event)">
             </mwl-text-input-autocomplete-container>
             <lib-expr-parser class="undraggable" *ngIf="!edits.state" [expression]="context.state" [context]="_this" [parent]="undefined"></lib-expr-parser>
             <button
@@ -79,24 +81,20 @@
               </td>
             </tr>
           </table>
-
-
-
-
         </div>
-
       </div>
     </ng-container>
   </div>
   <div class="context-actions" *ngIf="!hidden">
     <table>
-      <tr *ngFor="let a of context.actions" (mouseenter)="a.hover = true" (mouseleave)="a.hover = false">
+      <tr *ngFor="let a of context.actions; let i = index" (mouseenter)="a.hover = true" (mouseleave)="a.hover = false">
         <td class="undraggable" (click)="changeAction(a)">{{a.channel}}</td>
         <td>
-          <span class="undraggable" *ngIf="edits.truc[a.channel]">
-            <input type="text" [(ngModel)]="a.affectation.value">
+          <span class="undraggable" *ngIf="edits.actions[i]">
+            <input type="text" [(ngModel)]="a.affectation.value"
+                   (keydown)="closeInputActions($event,i)">
           </span>
-          <span class="undraggable" *ngIf="!edits.truc[a.channel]">
+          <span class="undraggable" *ngIf="!edits.actions[i]">
             <lib-expr-parser [expression]="a.affectation.value" [context]="_this" [parent]="undefined"></lib-expr-parser>
           </span>
         </td>
@@ -106,16 +104,16 @@
             class="btn btn-sm btn-primary"
             [class.d-none]="!editMode"
             [class.invisible] = "!a.hover"
-            (click)="edits.truc[a.channel] = !edits.truc[a.channel]; !edits.truc[a.channel] && onEdit()">
-            <span *ngIf="a.edit"><i class="fa fa-check"></i></span>
-            <span *ngIf="!a.edit"><i class="fa fa-pencil"></i></span>
+            (click)="edits.actions[i] = !edits.actions[i]; !edits.actions[i] && onEdit()">
+            <span *ngIf="edits.actions[i]"><i class="fa fa-check"></i></span>
+            <span *ngIf="!edits.actions[i]"><i class="fa fa-pencil"></i></span>
           </button>
           <button
             type="button"
             class="btn btn-sm btn-danger"
             [class.d-none]="!editMode"
             [class.invisible] = "!a.hover"
-            (click)="deleteAction(a); onEdit()">
+            (click)="deleteAction(i); onEdit()">
             <i class="fa fa-remove"></i>
           </button>
         </td>
@@ -126,7 +124,8 @@
             type="button"
             class="btn btn-sm btn-success w-100 m-0"
             [class.d-none]="!editMode"
-            (click)="newAction(); onEdit()">
+            (click)="newAction(); onEdit()"
+          >
             <i class="fa fa-plus"></i>
           </button>
         </td>

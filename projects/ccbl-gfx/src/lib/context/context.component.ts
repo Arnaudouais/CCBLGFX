@@ -2,7 +2,7 @@ import {Component, HostListener, Input, OnInit} from '@angular/core';
 import {HumanReadableStateContext} from 'ccbl-js/ProgramObjectInterface';
 import {MatDialog} from "@angular/material";
 import {VarSelectDialogComponent} from "../var-select-dialog/var-select-dialog.component";
-import {CcblGfxComponent} from "../ccbl-gfx.component";
+import {CcblGfxComponent, ContextOrProgramInfos} from '../ccbl-gfx.component';
 import {CcblGfxService} from "../ccbl-gfx.service";
 
 @Component({
@@ -21,8 +21,7 @@ export class ContextComponent implements OnInit {
   edits = {
     contextName: false,
     state: false,
-    actions: 0, // Actions that are currently being modified
-    truc: {}
+    actions: []
   };
 
   constructor(private dialog: MatDialog, private ccblService: CcblGfxService) {
@@ -32,6 +31,7 @@ export class ContextComponent implements OnInit {
   @Input() context: HumanReadableStateContext;
   @Input() wrapper: CcblGfxComponent;
   @Input() parent: ContextComponent;
+  // @Input() infos: ContextOrProgramInfos;
 
   @HostListener('click', ['$event']) onClick($event) {
     $event.stopPropagation();
@@ -57,7 +57,7 @@ export class ContextComponent implements OnInit {
 
   @HostListener('dblclick', ['$event']) onDoubleClick($event) {
     $event.stopPropagation();
-    this.editMode = !this.editMode;
+    this.onQuittingEditMode();
   }
 
 
@@ -85,7 +85,9 @@ export class ContextComponent implements OnInit {
       this.hidden = false;
     }
 
-    this.context.actions.forEach(a => this.edits.truc[a.channel] = false);
+    this.context.actions.forEach(a => this.edits.actions.push(false));
+    // this.hidden = !this.infos.visible;
+    // this.editMode = this.infos.editing;
   }
 
   unselect() {
@@ -138,8 +140,9 @@ export class ContextComponent implements OnInit {
     }
   }
 
-  deleteAction(action: any) {
-    this.context.actions.splice(this.context.actions.indexOf(action), 1);
+  deleteAction(i: number) {
+    this.context.actions.splice(i, 1);
+    this.edits.actions.splice(i, 1);
   }
 
   findChoices = (searchText: string) => {
@@ -185,16 +188,43 @@ export class ContextComponent implements OnInit {
   }
 
   private onQuittingEditMode() {
+    let toEdit: boolean;
+    toEdit = this.edits.state || this.edits.contextName;
     this.editMode = !this.editMode;
     this.edits.state = false;
     this.edits.contextName = false;
-    this.edits.actions = 0;
 
-    for (const k in this.edits.truc) {
-      this.edits.truc[k] = false;
+    for (const k in this.edits.actions) {
+      toEdit = toEdit || this.edits.actions[k];
+      this.edits.actions[k] = false;
     }
-
-    this.onEdit();
+    if (toEdit) {
+      this.onEdit();
+    }
   }
+  closeInputName($event: KeyboardEvent): void {
+    console.log($event.key);
+    if ($event.key === 'Enter') {
+      this.edits.contextName = !this.edits.contextName;
+      // this.onEdit();
+    }
+  }
+
+  closeInputState($event: KeyboardEvent): void {
+    console.log($event.key);
+    if ($event.key === 'Enter') {
+      this.edits.state = !this.edits.state;
+      // this.onEdit();
+    }
+  }
+
+  closeInputActions($event: KeyboardEvent, i: number): void {
+    console.log($event.key + i);
+    if ($event.key === 'Enter') {
+      this.edits.actions[i] = !this.edits.actions[i];
+      // this.onEdit();
+    }
+  }
+
 
 }
