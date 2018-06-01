@@ -5,23 +5,23 @@ import {CcblGfxService} from "./ccbl-gfx.service";
 import {DragulaService} from 'ng2-dragula';
 import {updateForIn} from 'tsickle/src/typescript-2.4';
 
-export declare type ContextOrProgramInfos = {
-  editing: boolean;
-  visible: boolean;
-  allen?: AllenGraphicalInfos;
-};
-
-export declare type AllenGraphicalInfos = {
-  During?: ContextOrProgramInfos[];
-  StartWith?: ContextOrProgramInfos[];
-  EndWith?: ContextOrProgramInfos[];
-};
-
-export declare type HRPGraphicalInfos = {
-  editing: boolean;
-  visible: boolean;
-  allen?: AllenGraphicalInfos;
-};
+// export declare type ContextOrProgramInfos = {
+//   editing: boolean;
+//   visible: boolean;
+//   allen?: AllenGraphicalInfos;
+// };
+//
+// export declare type AllenGraphicalInfos = {
+//   During?: ContextOrProgramInfos[];
+//   StartWith?: ContextOrProgramInfos[];
+//   EndWith?: ContextOrProgramInfos[];
+// };
+//
+// export declare type HRPGraphicalInfos = {
+//   editing: boolean;
+//   visible: boolean;
+//   allen?: AllenGraphicalInfos;
+// };
 
 @Component({
   selector: 'lib-ccbl-gfx',
@@ -31,7 +31,7 @@ export declare type HRPGraphicalInfos = {
 
 export class CcblGfxComponent implements AfterViewInit, OnInit {
   hrp: HumanReadableProgram;
-  hrpInfos: HRPGraphicalInfos;
+  // hrpInfos: HRPGraphicalInfos;
   selectedContext: ContextComponent;
   hover = '';
   depHovered = false;
@@ -63,7 +63,7 @@ export class CcblGfxComponent implements AfterViewInit, OnInit {
     this.ccblGfxService.addObserver(this.programChanged.bind(this));
     this.dragulaService.setOptions('bag', {
       moves: function (el: any, container: any, handle: any): any {
-        return !el.firstChild.classList.contains('undraggable') /*&& (el.firstChild.distanceDragged() > el.firstChild.d_drag)*/;
+        return !el.firstChild.classList.contains('undraggable');
       },
       invalid: function (el, handle) {
         const b = !el.classList.contains('context-drag');
@@ -76,6 +76,7 @@ export class CcblGfxComponent implements AfterViewInit, OnInit {
   ngAfterViewInit(): void {
     this.pile.push(JSON.parse(JSON.stringify(this.hrp)));
     this.index = 0;
+    // this.setHrpInfos(this.hrp.allen, this.hrpInfos.allen);
   }
 
 
@@ -144,9 +145,15 @@ export class CcblGfxComponent implements AfterViewInit, OnInit {
     if (!this.hrp.localChannels) {
       this.hrp.localChannels = [];
     }
-    // this.hrpInfos.editing = false;
-    // this.hrpInfos.visible = true;
-    // this.setHrpInfos(this.hrp.allen, this.hrpInfos.allen);
+    // this.hrpInfos = {
+    //   editing: false,
+    //   visible: true,
+    //   allen: {
+    //     During: [],
+    //     StartWith: [],
+    //     EndWith: []
+    //   }
+    // };
   }
 
   // setHrpInfos(allen: AllenRelationships, allenInfos: AllenGraphicalInfos) {
@@ -159,26 +166,20 @@ export class CcblGfxComponent implements AfterViewInit, OnInit {
   //   allenInfos.During = [];
   //   allenInfos.EndWith = [];
   //   for (const a in allen) {
-  //     allen.StartWith.forEach(function (s) {
+  //     allen.StartWith.forEach(s => {
   //       const tmpcpy = JSON.parse(JSON.stringify(temp));
   //       allenInfos.StartWith.push(tmpcpy);
-  //       if (s instanceof HumanReadableStateContext) {
-  //         this.setHrpInfos(s.allen, tmpcpy.allen);
-  //       }
+  //       this.setHrpInfos((<HumanReadableStateContext>s).allen, tmpcpy.allen);
   //     });
-  //     allen.During.forEach(function (d) {
+  //     allen.During.forEach(d => {
   //       const tmpcpy = JSON.parse(JSON.stringify(temp));
   //       allenInfos.During.push(tmpcpy);
-  //       if (d instanceof HumanReadableStateContext) {
-  //         this.setHrpInfos(d.allen, tmpcpy.allen);
-  //       }
+  //       this.setHrpInfos((<HumanReadableStateContext>d).allen, tmpcpy.allen);
   //     });
-  //     allen.EndWith.forEach(function (e) {
+  //     allen.EndWith.forEach(e => {
   //       const tmpcpy = JSON.parse(JSON.stringify(temp));
   //       allenInfos.EndWith.push(tmpcpy);
-  //       if (e instanceof HumanReadableStateContext) {
-  //         this.setHrpInfos(e.allen, tmpcpy.allen);
-  //       }
+  //       this.setHrpInfos((<HumanReadableStateContext>e).allen, tmpcpy.allen);
   //     });
   //   }
   // }

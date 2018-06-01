@@ -138,11 +138,7 @@
           "builder": "@angular-devkit/build-ng-packagr:build",
           "options": {
             "tsConfig": "projects/ccbl-gfx/tsconfig.lib.json",
-            "project": "projects/ccbl-gfx/ng-package.json",
-            "styles": [
-              "styles.scss"
-            ],
-            "scripts": []
+            "project": "projects/ccbl-gfx/ng-package.json"
           },
           "configurations": {
             "production": {

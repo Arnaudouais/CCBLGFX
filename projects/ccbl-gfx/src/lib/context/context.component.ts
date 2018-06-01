@@ -1,8 +1,8 @@
-import {Component, HostListener, Input, OnInit} from '@angular/core';
+import {Component, HostListener, Input, OnChanges, OnInit} from '@angular/core';
 import {HumanReadableStateContext} from 'ccbl-js/ProgramObjectInterface';
 import {MatDialog} from "@angular/material";
 import {VarSelectDialogComponent} from "../var-select-dialog/var-select-dialog.component";
-import {CcblGfxComponent, ContextOrProgramInfos} from '../ccbl-gfx.component';
+import {CcblGfxComponent} from '../ccbl-gfx.component';
 import {CcblGfxService} from "../ccbl-gfx.service";
 
 @Component({
@@ -155,23 +155,23 @@ export class ContextComponent implements OnInit {
     return `${choice}`;
   }
 
-  private newAction() {
+  newAction() {
     this.context.actions.push({channel: 'NEW', affectation: {value: '0'}});
   }
 
-  private newStartWithContext() {
+  newStartWithContext() {
     this.context.allen.StartWith.push({contextName: 'NEW', state: 'false'});
   }
 
-  private newDuringContext() {
+  newDuringContext() {
     this.context.allen.During.push({contextName: 'NEW', state: 'false'});
   }
 
-  private newEndWithContext() {
+  newEndWithContext() {
     this.context.allen.EndWith.push({contextName: 'NEW', state: 'false'});
   }
 
-  private changeAction(action: any) {
+  changeAction(action: any) {
     const d = this.dialog.open(VarSelectDialogComponent);
     d.afterClosed().subscribe((r: string) => {
       action.channel = r;
@@ -183,11 +183,11 @@ export class ContextComponent implements OnInit {
     return this;
   }
 
-  private onEdit() {
+  onEdit() {
     this.wrapper.onEdit();
   }
 
-  private onQuittingEditMode() {
+  onQuittingEditMode() {
     let toEdit: boolean;
     toEdit = this.edits.state || this.edits.contextName;
     this.editMode = !this.editMode;
@@ -203,27 +203,45 @@ export class ContextComponent implements OnInit {
     }
   }
   closeInputName($event: KeyboardEvent): void {
-    console.log($event.key);
+    // console.log($event.key);
     if ($event.key === 'Enter') {
       this.edits.contextName = !this.edits.contextName;
-      // this.onEdit();
+      this.onEdit();
     }
   }
 
   closeInputState($event: KeyboardEvent): void {
-    console.log($event.key);
+    // console.log($event.key);
     if ($event.key === 'Enter') {
       this.edits.state = !this.edits.state;
-      // this.onEdit();
+      this.onEdit();
     }
   }
 
   closeInputActions($event: KeyboardEvent, i: number): void {
-    console.log($event.key + i);
+    // console.log($event.key + i);
     if ($event.key === 'Enter') {
       this.edits.actions[i] = !this.edits.actions[i];
-      // this.onEdit();
+      this.onEdit();
     }
+  }
+  closeInputName1(): void {
+    if (this.edits.contextName) {
+      this.onEdit();
+    }
+    this.edits.contextName = !this.edits.contextName;
+  }
+  closeInputState1(): void {
+    if (this.edits.state) {
+      this.onEdit();
+    }
+    this.edits.state = !this.edits.state;
+  }
+  closeInputActions1(i: number): void {
+    if (this.edits.actions[i]) {
+      this.onEdit();
+    }
+    this.edits.actions[i] = !this.edits.actions[i];
   }
 
 

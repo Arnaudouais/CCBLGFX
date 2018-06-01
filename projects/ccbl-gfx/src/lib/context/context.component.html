@@ -11,7 +11,7 @@
               type="button"
               class="btn btn-sm btn-primary"
               [class.d-none]="!editMode"
-              (click)="edits.contextName = !edits.contextName && !edits.contextName || onEdit()">
+              (click)="closeInputName1()">
               <span *ngIf="edits.contextName"><i class="fa fa-check"></i></span>
               <span *ngIf="!edits.contextName"><i class="fa fa-pencil"></i></span>
             </button>
@@ -33,7 +33,7 @@
               type="button"
               class="btn btn-sm btn-primary"
               [class.d-none]="!editMode"
-              (click)="edits.state = !edits.state && !edits.state || onEdit()">
+              (click)="closeInputState1()">
               <span *ngIf="edits.state"><i class="fa fa-check"></i></span>
               <span *ngIf="!edits.state"><i class="fa fa-pencil"></i></span>
             </button>
@@ -104,7 +104,7 @@
             class="btn btn-sm btn-primary"
             [class.d-none]="!editMode"
             [class.invisible] = "!a.hover"
-            (click)="edits.actions[i] = !edits.actions[i]; !edits.actions[i] && onEdit()">
+            (click)="closeInputActions1(i)">
             <span *ngIf="edits.actions[i]"><i class="fa fa-check"></i></span>
             <span *ngIf="!edits.actions[i]"><i class="fa fa-pencil"></i></span>
           </button>

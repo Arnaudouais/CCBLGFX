@@ -1,7 +1,9 @@
 import {Component, Input, OnInit} from '@angular/core';
 
-import * as jsep from "jsep";
+import * as jsep_ from "jsep";
 import {ContextComponent} from "../context/context.component";
+
+let jsep: any = (<any>jsep_).default || jsep_;
 
 @Component({
   selector: 'lib-expr-parser',
@@ -14,9 +16,9 @@ export class ExprParserComponent implements OnInit {
   @Input() parent: ExprParserComponent;
   @Input() context: ContextComponent;
 
-  private expressionParsed;
-  private expressionType;
-  private classes = [];
+  expressionParsed;
+  expressionType;
+  classes = [];
 
   constructor() { }
 
